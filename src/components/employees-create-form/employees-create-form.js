@@ -7,7 +7,7 @@ class EmployeesCreateForm extends React.Component{
         super(props);
         this.state = {
             name: '',
-            salary: '',
+            salary: ''
         }
     }
 
@@ -17,13 +17,22 @@ class EmployeesCreateForm extends React.Component{
         });
     }
 
+    onSubmit = (e) => {
+        e.preventDefault();
+        this.props.onAdd(this.state.name, this.state.salary);
+        this.setState({
+            name: '',
+            salary: ''
+        })
+    }
+
     render(){
         const {name, salary} = this.state;
 
         return (
             <div className="app-create-form">
                 <h3>Add new employee</h3>
-                <form className="add-form d-flex">
+                <form className="add-form d-flex" onSubmit={this.onSubmit}>
                     <input type="text"
                            name="name"
                            value={name}
