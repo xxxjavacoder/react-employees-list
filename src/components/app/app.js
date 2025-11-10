@@ -1,3 +1,5 @@
+import React from 'react';
+
 import AppInfo from '../app-info/app-info';
 import SearchPanel from '../search-panel/search-panel';
 import AppFilters from '../app-filters/app-filters';
@@ -6,27 +8,39 @@ import EmployeesCreateForm from "../employees-create-form/employees-create-form"
 
 import './app.css';
 
-function App() {
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [
+                {name: 'Ivan', salary: 1000, increase: true, id: 1},
+                {name: 'Petro', salary: 2000, increase: true, id: 2},
+                {name: 'Semen', salary: 2750, increase: false, id: 3}
+            ]
+        };
+    }
 
-    const data = [
-        {name: 'Ivan', salary: 1000, increase: true, id: 1},
-        {name: 'Petro', salary: 2000, increase: true, id: 2},
-        {name: 'Semen', salary: 2750, increase: false, id: 3}
-    ];
+    deleteItem = (id) => {
+        this.setState(({data}) => ({
+            data: data.filter(item => item.id !== id)
+        }));
+    }
 
-    return (
-        <div className="app">
-            <AppInfo />
-            
-            <div className="search-panel">
-                <SearchPanel />
-                <AppFilters />
+    render() {
+        return (
+            <div className="app">
+                <AppInfo />
+
+                <div className="search-panel">
+                    <SearchPanel />
+                    <AppFilters />
+                </div>
+
+                <EmployeesList data={this.state.data} onDelete={this.deleteItem} />
+                <EmployeesCreateForm />
             </div>
-
-            <EmployeesList data={data} />
-            <EmployeesCreateForm />
-        </div>
-    );
+        );
+    }
 }
 
 export default App;
