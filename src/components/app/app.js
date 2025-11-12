@@ -17,7 +17,8 @@ class App extends React.Component {
                 {name: 'Petro', salary: 2000, increase: true, like: false, id: 2},
                 {name: 'Semen', salary: 2750, increase: false, like: true, id: 3}
             ],
-            term: ''
+            term: '',
+            filter: 'all'
         };
         this.maxId = 4;
     }
@@ -78,18 +79,33 @@ class App extends React.Component {
         this.setState({term});
     }
 
+    onFilterChange = (data, filter) => {
+        if (filter === 'like') {
+            return data.filter(item => item.like);
+        } else if (filter === 'salary') {
+            return data.filter(item => item.salary >= 1000);
+        } else if (filter === 'all') {
+             return data;
+        }
+    }
+
+    onUpdateFilter = (filter) => {
+        this.setState({filter});
+    }
+
     render() {
+        const visibleData = this.searchEmp(this.onFilterChange(this.state.data, this.state.filter), this.state.term);
         return (
             <div className="app">
                 <AppInfo empCount={this.state.data.length} increaseCount={this.state.data.filter(item => item.increase).length} />
 
                 <div className="search-panel">
                     <SearchPanel onUpdateTerm={this.onUpdateTerm}/>
-                    <AppFilters />
+                    <AppFilters filter={this.state.filter} onUpdateFilter={this.onUpdateFilter} />
                 </div>
 
                 <EmployeesList
-                    data={this.searchEmp(this.state.data, this.state.term)}
+                    data={visibleData}
                     onDelete={this.deleteItem}
                     onToggleProp={this.toggleProp}
                 />
